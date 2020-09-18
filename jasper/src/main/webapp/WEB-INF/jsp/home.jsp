@@ -50,15 +50,6 @@ function validateForm() {
 	  return false;
   }
   
-  if( x != "kesav"){
-	  bootbox.alert("Wrong UserName!!!");
-	  return false; 
-  }
-  
-  if( y != "12345"){
-	  bootbox.alert("Wrong Password!!!");
-	  return false; 
-  }
 }
 </script>
   

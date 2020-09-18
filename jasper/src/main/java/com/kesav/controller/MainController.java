@@ -1,5 +1,9 @@
 package com.kesav.controller;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,61 +16,65 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.kesav.entity.Login;
 import com.kesav.service.UserService;
 
-@Controller	
+@Controller
 public class MainController {
+	
+	@PersistenceContext
+	 private EntityManager entityManager;
 
 	@Autowired
 	UserService userService;
-	
-	@RequestMapping(value="/login" ,method = {RequestMethod.POST , RequestMethod.GET})
+
+	@RequestMapping(value = "/login", method = { RequestMethod.POST, RequestMethod.GET })
 	public String home(Model model) {
-		
+
 		System.out.println("inside controller....");
-		 model.addAttribute("login", new Login()); 
-		
-	return "home";
+		model.addAttribute("login", new Login());
+
+		return "home";
 	}
-	
-	@RequestMapping(value="/home" ,method = {RequestMethod.POST , RequestMethod.GET})
-	public String welcomePage(@RequestParam("username") String username,@RequestParam("password") String password, HttpServletRequest request,Model model ) {
-		
-		
-		/*if(username!=null && !"".equals(username)) {
-			if(password !=null && !"".equals(password)) {
-				if(username.equalsIgnoreCase("kesav")) {
-					if(password.equalsIgnoreCase("12345")) {
-					
-						return "welcome";
-					}
-				}
-			}
-		}else {
-			
-			model.addAttribute("msg","Please enter UserName and Password...");
-			return "redirect:/login";
-		}*/
-		
-		Login login = null;
+
+	@RequestMapping(value = "/home", method = { RequestMethod.POST, RequestMethod.GET })
+	public String welcomePage(@RequestParam("username") String username, @RequestParam("password") String password,
+			HttpServletRequest request, Model model) {
+		String msg = "";
+		//Login login = null;
+		List<Object[]> list=null;
+		String qry="";
+		String dbusername = null;
+		String dbpassword = null;
 		
 		try {
+
+			qry = "select username, password from users";
+			list = entityManager.createNativeQuery(qry).getResultList();
+
+			if (list.size() > 0) {
+				dbusername = (String) list.get(0)[0];
+				dbpassword = (String) list.get(0)[1];
+			}
 			
-			login = userService.findByUsername(username);
-			
-		}catch(Exception e) {
-			
+			if(username.equalsIgnoreCase(dbusername)) {
+				if(password.equalsIgnoreCase(dbpassword)) {
+					return "welcome";
+				}else {
+					msg = "Invalid Password";
+				}
+			}else {
+				msg = "Invalid UserName";
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		if(login != null) {
-			return "welcome";
-		}
-		
+
 		return "redirect:/login";
 	}
-	
-	@RequestMapping(value="/jasperModel", method = {RequestMethod.POST , RequestMethod.GET})
+
+	@RequestMapping(value = "/jasperModel", method = { RequestMethod.POST, RequestMethod.GET })
 	public String jasperModel() {
-		
+
 		return "jasper";
-		
+
 	}
 }
