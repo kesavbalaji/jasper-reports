@@ -68,7 +68,7 @@ function validateForm() {
 
 <div class="container">
   <h2>Login</h2>
-  <form:form modelAttribute="Login"  onsubmit="return validateForm()" action="/home" name="myForm" method="POST">
+  <form:form modelAttribute="login"  onsubmit="return validateForm()" action="/home" name="myForm" method="POST">
 <strong>User Name</strong>
 <form:input type="text" name="username" path="username" class="form-control" paceholer="Enter UserName"/><br><br>	
 <strong>Password</strong>

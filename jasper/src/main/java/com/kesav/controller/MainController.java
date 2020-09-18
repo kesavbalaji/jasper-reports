@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.kesav.entity.Login;
+import com.kesav.service.UserService;
+
 @Controller	
 public class MainController {
 
 	@Autowired
 	UserService userService;
 	
-	@RequestMapping("/login")
+	@RequestMapping(value="/login" ,method = {RequestMethod.POST , RequestMethod.GET})
 	public String home(Model model) {
 		
 		System.out.println("inside controller....");
@@ -24,8 +27,8 @@ public class MainController {
 	return "home";
 	}
 	
-	@RequestMapping(value="/home" ,method = {RequestMethod.POST})
-	public String welcomePage(@RequestParam("username") String username,@RequestParam("password") String password, HttpServletRequest request,Model model) {
+	@RequestMapping(value="/home" ,method = {RequestMethod.POST , RequestMethod.GET})
+	public String welcomePage(@RequestParam("username") String username,@RequestParam("password") String password, HttpServletRequest request,Model model ) {
 		
 		
 		/*if(username!=null && !"".equals(username)) {
@@ -60,7 +63,7 @@ public class MainController {
 		return "redirect:/login";
 	}
 	
-	@RequestMapping(value="/jasperModel", method= {RequestMethod.GET})
+	@RequestMapping(value="/jasperModel", method = {RequestMethod.POST , RequestMethod.GET})
 	public String jasperModel() {
 		
 		return "jasper";
